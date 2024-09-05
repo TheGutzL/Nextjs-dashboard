@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Noto_Sans_Display } from "next/font/google";
@@ -18,7 +19,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={noto.className}>{children}</body>
+        <body className={noto.className}>
+          <ThemeProvider
+            attribute="class"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
       </html>
     </ClerkProvider>
   );

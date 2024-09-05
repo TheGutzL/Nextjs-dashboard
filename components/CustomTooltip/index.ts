@@ -1,1 +1,2 @@
-export * from "./CustomTooltip";
+export { default as CustomTooltip } from './CustomTooltip';
+export * from './CustomTooltip.types';
