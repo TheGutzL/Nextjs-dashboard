@@ -15,13 +15,7 @@ import {
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -30,30 +24,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatPrice } from "@/lib/formatPrice";
+import { ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { TableIntegrationProps } from "./TableIntegrations.types";
-import { Progress } from "@/components/ui/progress";
-import { ChevronUp } from "lucide-react";
-import { formatPrice } from "@/lib/formatPrice";
 
 const data: TableIntegrationProps[] = [
   {
     app: "Stripe",
-    icon: "/images/stripe.png",
+    icon: "/images/stripe.webp",
     type: "Finance",
     rate: 60,
     profit: 450,
   },
   {
     app: "Zapier",
-    icon: "/images/zapier.png",
+    icon: "/images/zapier.webp",
     type: "CRM",
     rate: 20,
     profit: 123.5,
   },
   {
     app: "Shopify",
-    icon: "/images/shopify.png",
+    icon: "/images/shopify.svg",
     type: "Marketplace",
     rate: 80,
     profit: 879.89,
@@ -62,7 +55,7 @@ const data: TableIntegrationProps[] = [
 
 export const columns: ColumnDef<TableIntegrationProps>[] = [
   {
-    id: "icon",
+    accessorKey: "icon",
     header: "LOGO",
     cell: ({ row }) => (
       <div className="capitalize">
@@ -98,7 +91,7 @@ export const columns: ColumnDef<TableIntegrationProps>[] = [
     ),
   },
   {
-    id: "profit",
+    accessorKey: "profit",
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -148,46 +141,7 @@ const TableIntegrations = () => {
   });
 
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="ml-auto"
-            >
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+    <div className="w-full mt-5">
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -237,30 +191,6 @@ const TableIntegrations = () => {
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
       </div>
     </div>
   );
